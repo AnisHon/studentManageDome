@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db01
+    username: anishan
+    password: Han123456
+
+
+
+
+mybatis-plus:
+  mapper-locations: classpath:mappers/*xml
+  type-aliases-package: com.anishan.dome.mybatis.entity
+
+
+logging:
+  level:
+    com.baomidou: debug
+
+
+
