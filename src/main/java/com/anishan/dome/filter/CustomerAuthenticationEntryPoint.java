@@ -1,7 +1,7 @@
 package com.anishan.dome.filter;
 
 import cn.hutool.http.HttpStatus;
-import com.anishan.dome.domain.AjaxResult;
+import com.anishan.dome.domain.AjaxResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class CustomerAuthenticationEntryPoint implements AuthenticationEntryPoin
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
 
-        AjaxResult<Void> error = AjaxResult.error(HttpStatus.HTTP_UNAUTHORIZED, "未授权");
+        AjaxResponse<Void> error = AjaxResponse.error(HttpStatus.HTTP_UNAUTHORIZED, "未授权");
         objectMapper.writeValue(response.getWriter(), error);
 
 
