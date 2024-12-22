@@ -1,16 +1,21 @@
 package com.anishan.dome.domain.entity;
 
-import cn.hutool.core.date.DateTime;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.time.LocalDateTime;
 
 @Data
+@ApiModel("实体类基类")
 public class BaseEntity {
 
 
-    @ModelAttribute()
-    private DateTime createTime;
-    private DateTime updateTime;
+    @ApiModelProperty("插入和更新的时候请忽略，但是存在于查询结果")
+    private LocalDateTime createTime;
+    @ApiModelProperty("插入和更新的时候请忽略，但是存在于查询结果")
+    private LocalDateTime updateTime;
 
 
 }

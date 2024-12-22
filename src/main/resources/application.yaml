@@ -7,6 +7,12 @@ spring:
     url: jdbc:mysql://localhost:3306/db01
     username: anishan
     password: Han123456
+  web:
+    resources:
+      add-mappings: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+
 
 
 knife4j:
@@ -23,11 +29,11 @@ knife4j:
     license-url: https://stackoverflow.com/
     terms-of-service-url: https://stackoverflow.com/
     group:
-      test1:
-        group-name: 分组名称
+      default:
+        group-name: 不知道叫什么名字好
         api-rule: package
         api-rule-resources:
-          - com.knife4j.demo.new3
+          - com.anishan.dome
 
 mybatis-plus:
   mapper-locations: classpath:mappers/*xml

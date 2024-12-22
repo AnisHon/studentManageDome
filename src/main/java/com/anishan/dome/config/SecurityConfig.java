@@ -43,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth ->
-                        auth.anyRequest().denyAll()
+                        auth.anyRequest().permitAll()
                 )
                 .exceptionHandling(conf -> conf
                         .accessDeniedHandler(accessDeniedHandler)

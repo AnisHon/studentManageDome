@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor()
 public class AuthUtils {
 
     private static final Map<Long, LoginedUser> loginUsers = new HashMap<>();

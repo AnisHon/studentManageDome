@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,9 +14,12 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Data
+@ApiModel("分页基类")
 public class BaseQueryParam<T> {
 
+    @ApiModelProperty("页码")
     private Long pageNum;
+    @ApiModelProperty("页大小")
     private Long pageSize;
 
     public Page<T> queryPage() {
@@ -25,9 +30,10 @@ public class BaseQueryParam<T> {
 
         QueryWrapper<T> wrapper = new QueryWrapper<>();
 
+        Class<?> clazz = this.getClass();
         Stream<Method> getters = Arrays
-                .stream(this.getClass().getDeclaredMethods())
-                .filter(x -> x.getName().startsWith("get"));
+                .stream(clazz.getMethods())
+                .filter(x -> x.getName().startsWith("get") && x.getDeclaringClass().equals(clazz));
 
         getters.forEach(x -> {
             String column = StringUtils.camelToUnderline(x.getName().replaceFirst("get", ""));
