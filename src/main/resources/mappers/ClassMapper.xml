@@ -10,7 +10,49 @@
             <result property="className" column="class_name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        class_id,major_id,class_name
-    </sql>
+    <resultMap id="ClassVoMap" type="com.anishan.dome.domain.vo.ClassVo">
+        <id property="classId" column="class_id" jdbcType="BIGINT"/>
+        <result property="className" column="class_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+        <association property="major" javaType="com.anishan.dome.domain.entity.Major">
+            <id property="majorId" column="major_id"/>
+            <result property="institution" column="institution"/>
+            <result property="majorName" column="major_name"/>
+            <result property="createTime" column="m_create_time" />
+            <result property="updateTime" column="m_update_time" />
+        </association>
+    </resultMap>
+
+    <select id="selectClassVoAll" resultMap="ClassVoMap">
+        select
+            class_id,
+            class.major_id as major_id,
+            class_name,
+            class.create_time as create_time,
+            class.update_time as update_time,
+            major_name,
+            institution,
+            major.create_time as m_create_time,
+            major.update_time as m_update_time
+
+        from class
+            left join major on  class.major_id = major.major_id
+    </select>
+    <select id="selectClassVo" resultMap="ClassVoMap">
+        select
+            class_id,
+            class.major_id as major_id,
+            class_name,
+            class.create_time as create_time,
+            class.update_time as update_time,
+            major_name,
+            institution,
+            major.create_time as m_create_time,
+            major.update_time as m_update_time
+
+        from class
+                 left join major on  class.major_id = major.major_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

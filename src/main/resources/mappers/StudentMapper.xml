@@ -13,4 +13,24 @@
     <sql id="Base_Column_List">
         user_id,major_id,class_id
     </sql>
+    <select id="selectStudentVo" resultType="com.anishan.dome.domain.vo.StudentVo">
+        select
+            st.user_id as user_id,
+            work_number,
+            c.major_id as major_id,
+            birthday,
+            gender,
+            st.class_id as class_id,
+            st.create_time as create_time,
+            st.update_time as update_time,
+            m.major_name as  major_name,
+            m.institution as institution,
+            c.class_name as class_name
+        from student st
+        left join sys_user u on st.user_id = u.user_id
+        left join class c on st.class_id = c.class_id
+        left join major m on c.major_id = m.major_id
+
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

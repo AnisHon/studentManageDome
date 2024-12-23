@@ -4,6 +4,8 @@ import cn.hutool.http.HttpStatus;
 import com.anishan.dome.domain.AjaxResponse;
 import com.anishan.dome.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -15,6 +17,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public AjaxResponse<Void> handleException(Exception e) {
         log.error(e.getMessage(), e);
+        log.error(String.valueOf(e.getClass()));
         return AjaxResponse.error(HttpStatus.HTTP_INTERNAL_ERROR, e.getMessage());
     }
 
@@ -37,6 +40,20 @@ public class GlobalExceptionAdvice {
     public AjaxResponse<Void> handleNoHandlerFoundException(NoHandlerFoundException e) {
         return AjaxResponse.error(HttpStatus.HTTP_NOT_FOUND, e.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleBindException(BindException e) {
+        StringBuilder msg = new StringBuilder();
+        for (FieldError fieldError : e.getFieldErrors()) {
+
+               msg.append(fieldError.getField()).append(" 不能为 ").append(fieldError.getRejectedValue()).append("\n");
+        }
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, msg.toString());
+    }
+
+
 
 
 

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -19,9 +20,15 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     private final IService<T> service;
 
+    @GetMapping("/{id}")
+    @ApiOperation("通过ID查询")
+    public AjaxResponse<T> get(@PathVariable Long id) {
+        return AjaxResponse.ok(service.getById(id));
+    }
+
     @GetMapping("/list")
     @ApiOperation("查询，分页接口")
-    protected AjaxResponse<PageResponse<T>> list(K query) {
+    public AjaxResponse<PageResponse<T>> list(K query) {
         System.out.println(query);
         Page<T> tPage = query.queryPage();
         LambdaQueryWrapper<T> wrapper = query.queryWrapper();
@@ -39,7 +46,7 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @PostMapping("/")
     @ApiOperation("添加接口")
-    public AjaxResponse<Boolean> save(@RequestBody T entity) {
+    public AjaxResponse<Boolean> save(@Validated  @RequestBody T entity) {
         Arrays
                 .stream(entity.getClass().getDeclaredFields())
                 .filter(x -> x.isAnnotationPresent(TableId.class))
@@ -57,7 +64,7 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @PutMapping("/")
     @ApiOperation("修改接口")
-    public AjaxResponse<Boolean> update(@RequestBody T entity) {
+    public AjaxResponse<Boolean> update(@Validated @RequestBody T entity) {
         return AjaxResponse.ok(service.updateById(entity));
     }
 

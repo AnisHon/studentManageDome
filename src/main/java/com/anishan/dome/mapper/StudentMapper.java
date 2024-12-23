@@ -1,7 +1,13 @@
 package com.anishan.dome.mapper;
 
 import com.anishan.dome.domain.entity.Student;
+import com.anishan.dome.domain.vo.StudentVo;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -10,6 +16,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.aninshan.dome.domain.entity.Student
 */
 public interface StudentMapper extends BaseMapper<Student> {
+
+    List<StudentVo> selectStudentVo(@Param("page") Page<Student> page, @Param("ew") Wrapper<Student> wrapper);
+
 
 }
 

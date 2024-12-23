@@ -30,12 +30,6 @@ public class Student extends BaseEntity implements Serializable {
     /**
      *
      */
-    @ApiModelProperty("专业id")
-    private Long majorId;
-
-    /**
-     *
-     */
     @ApiModelProperty("班级id")
     private Long classId;
 

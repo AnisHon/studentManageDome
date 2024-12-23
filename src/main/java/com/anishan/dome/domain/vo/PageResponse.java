@@ -19,4 +19,12 @@ public class PageResponse<T> {
         return tPageResponse;
     }
 
+    public static <T> PageResponse<T> build(Long total, List<T> rows) {
+        PageResponse<T> tPageResponse = new PageResponse<>();
+
+        tPageResponse.setTotal(total);
+        tPageResponse.setRows(rows);
+        return tPageResponse;
+    }
+
 }

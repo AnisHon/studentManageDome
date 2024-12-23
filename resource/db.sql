@@ -47,8 +47,8 @@ create table sys_user
     username    varchar(255) not null comment '姓名',
     birthday    date         not null comment '生日',
     gender      tinyint      not null comment '性别 0 男 1女',
-    role        int          null comment '(学生 1 辅导员 5 教师 10 管理员 20)',
-    status      int          null comment '用户状态(0 正常，1 异常)',
+    role        int          null default 1 comment '(学生 1 辅导员 5 教师 10 管理员 20)',
+    status      int          null default 0 comment '用户状态(0 正常，1 异常)',
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint sys_user_pk_2
@@ -65,14 +65,11 @@ create table student
 (
     user_id     bigint       not null comment '用户id'
         primary key,
-    major_id    bigint       not null comment '专业id',
     class_id    bigint       not null comment '班级id',
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint student_fk_user_id
         foreign key student(user_id) references sys_user(user_id),
-    constraint student_major_pk foreign key student(major_id)
-        references major(major_id),
     constraint student_class_pk foreign key student(class_id)
         references class(class_id)
 ) engine=InnoDB comment '用户分表 学生表';

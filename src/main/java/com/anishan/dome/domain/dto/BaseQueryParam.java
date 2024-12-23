@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -17,8 +18,11 @@ import java.util.stream.Stream;
 @ApiModel("分页基类")
 public class BaseQueryParam<T> {
 
+    @NotNull
     @ApiModelProperty("页码")
     private Long pageNum;
+
+    @NotNull
     @ApiModelProperty("页大小")
     private Long pageSize;
 

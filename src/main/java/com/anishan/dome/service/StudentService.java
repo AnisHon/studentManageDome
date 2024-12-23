@@ -1,7 +1,13 @@
 package com.anishan.dome.service;
 
+import com.anishan.dome.controller.StudentDto;
+import com.anishan.dome.domain.dto.StudentQuery;
 import com.anishan.dome.domain.entity.Student;
+import com.anishan.dome.domain.vo.PageResponse;
+import com.anishan.dome.domain.vo.StudentVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -10,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface StudentService extends IService<Student> {
 
+    PageResponse<StudentVo> queryVo(StudentQuery query);
+
+    Boolean removeStudentByIds(List<Long> userId);
+
+    Boolean saveStudent(StudentDto entity);
+
+    Boolean updateStudent(StudentDto studentDto);
 }

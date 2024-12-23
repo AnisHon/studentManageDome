@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db01
+    url: jdbc:mysql://localhost:3306/db_design
     username: anishan
     password: Han123456
   web:
@@ -38,6 +38,8 @@ knife4j:
 mybatis-plus:
   mapper-locations: classpath:mappers/*xml
   type-aliases-package: com.anishan.dome.mybatis.entity
+  configuration:
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
 
 
 logging:
