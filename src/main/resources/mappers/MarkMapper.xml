@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anishan.dome.mapper.MarkMapper">
+
+    <resultMap id="BaseResultMap" type="com.anishan.dome.domain.entity.Mark">
+            <result property="studentId" column="student_id" jdbcType="BIGINT"/>
+            <result property="instructorId" column="instructor_id" jdbcType="BIGINT"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        student_id,instructor_id,tag,
+        create_time,update_time
+    </sql>
+</mapper>
