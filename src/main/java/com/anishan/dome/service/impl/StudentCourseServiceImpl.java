@@ -11,6 +11,7 @@ import com.anishan.dome.exception.BusinessException;
 import com.anishan.dome.mapper.StudentCourseMapper;
 import com.anishan.dome.service.StudentCourseService;
 import com.anishan.dome.utils.SchoolYearUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -98,7 +99,7 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
 
         List<EnrollCourse> enrollCourses = studentCourseMapper.selectAvailable(wrapper, offset, pageSize);
 
-        Long total = studentCourseMapper.countAvailable(wrapper);
+        Long total = studentCourseMapper.countAvailable(schoolYear);
 
         return PageResponse.build(total, enrollCourses);
     }

@@ -76,7 +76,7 @@ public class AuthUtils {
     public static LoginUser getLoginUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof LoginUser)) {
-            throw new AuthException("未登录", LoginErrorEnum.IllegalPassword);
+            throw new AuthException("未登录", LoginErrorEnum.IllegalState);
         }
         return (LoginUser) principal;
     }

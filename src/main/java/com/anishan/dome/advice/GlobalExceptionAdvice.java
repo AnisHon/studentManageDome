@@ -46,11 +46,18 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(AuthException.class)
     public AjaxResponse<Void> handleAuthException(AuthException e, HttpServletResponse response) {
         int respCode = 0;
-        if (e.getLoginErrorEnum() == LoginErrorEnum.IllegalState) {
-            respCode = HttpStatus.HTTP_UNAUTHORIZED;
-        } else {
-            respCode = HttpStatus.HTTP_BAD_REQUEST;
+        switch (e.getLoginErrorEnum()) {
+            case IllegalState:
+                respCode = HttpStatus.HTTP_UNAUTHORIZED;
+                break;
+            case WrongCaptcha:
+            case WrongPassword:
+            case IllegalPassword:
+            case UnknownUsername:
+            case UsernameConflict:
+                respCode = HttpStatus.HTTP_BAD_REQUEST;
         }
+
         response.setStatus(respCode);
         return AjaxResponse.error(respCode, e.getMessage());
     }

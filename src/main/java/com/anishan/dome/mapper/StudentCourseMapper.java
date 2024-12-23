@@ -4,11 +4,8 @@ import com.anishan.dome.domain.entity.StudentCourse;
 import com.anishan.dome.domain.entity.TeacherCourse;
 import com.anishan.dome.domain.vo.EnrollCourse;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
     void deleteBatchInSchoolYear(@Param("list") List<StudentCourse> courses, @Param("year") int year);
 
     List<EnrollCourse> selectAvailable(@Param("ew") Wrapper<TeacherCourse> wrapper, @Param("offset") Long offset, @Param("limit") Long limit);
-    Long countAvailable(@Param("ew") Wrapper<TeacherCourse> wrapper);
+    Long countAvailable(@Param("schoolYear") int schoolYear);
 
     List<EnrollCourse> selectByUser(@Param("userId") Long userId, @Param("schoolYear") int schoolYear);
 }

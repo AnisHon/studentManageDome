@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @ResponseBody
-    @GetMapping
+    @GetMapping("/captcha")
     @ApiOperation("获取验证码")
     public AjaxResponse<CaptchaResponse> getCurrentUser() {
 
@@ -54,7 +54,7 @@ public class AuthController {
     }
 
     @ResponseBody
-    @GetMapping
+    @GetMapping()
     @ApiOperation("获取自己")
     public AjaxResponse<LoginUser> myself() {
         return AjaxResponse.ok(AuthUtils.getLoginUser());

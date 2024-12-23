@@ -83,13 +83,11 @@ create table teacher
     user_id     bigint       not null comment '用户id'
         primary key,
     title       varchar(255) not null comment '职称',
-    major_id    bigint       not null comment '专业',
+    institution varchar(255) not null comment '院校',
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint teacher_fk_user_id
-        foreign key teacher(user_id) references sys_user(user_id),
-    constraint teacher_major_pk foreign key teacher(major_id)
-        references major(major_id)
+        foreign key teacher(user_id) references sys_user(user_id)
 ) engine=InnoDB comment '用户分表 教师表';
 
 # -----------------------------------------------------

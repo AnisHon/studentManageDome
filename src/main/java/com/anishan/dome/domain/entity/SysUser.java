@@ -1,5 +1,6 @@
 package com.anishan.dome.domain.entity;
 
+import com.anishan.dome.enumeration.Gender;
 import com.anishan.dome.enumeration.RoleEnum;
 import com.anishan.dome.enumeration.UserStatus;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -10,7 +11,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,6 +31,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 用户id
      */
+    @NotNull(groups = Update.class)
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("用户id")
     private Long userId;
@@ -40,6 +46,7 @@ public class SysUser extends BaseEntity implements Serializable {
      * 密码
      */
     @ApiModelProperty("密码")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,16}$\n", message = "密码必须包含数字和字母，长度6-16")
     private String password;
 
     /**
@@ -58,7 +65,7 @@ public class SysUser extends BaseEntity implements Serializable {
      * 性别 0 男 1女
      */
     @ApiModelProperty("性别 0 男 1女")
-    private Integer gender;
+    private Gender gender;
 
     /**
      * (学生 1 辅导员 5 教师 10 管理员 20)

@@ -38,11 +38,10 @@
             c.duration as duration,
             c.school_year as school_year,
             su.username as username,
-            m.institution as institution
+            t.institution as institution
         from teacher_course tc
             left join course c on c.course_id = tc.course_id
             left join teacher t on t.user_id = tc.user_id
-            left join major m on t.major_id = m.major_id
             left join sys_user su on su.user_id = t.user_id
 
         ${ew.customSqlSegment}
@@ -57,11 +56,8 @@
             count(*)
         from teacher_course tc
             left join course c on c.course_id = tc.course_id
-            left join teacher t on t.user_id = tc.user_id
-            left join major m on t.major_id = m.major_id
-            left join sys_user su on su.user_id = t.user_id
 
-            ${ew.customSqlSegment}
+        where c.school_year = #{schoolYear}
     </select>
 
     <select id="selectByUser" resultMap="EnrollCourseMap">
@@ -72,11 +68,10 @@
             c.duration as duration,
             c.school_year as school_year,
             su.username as username,
-            m.institution as institution
+            t.institution as institution
         from teacher_course tc
             left join course c on c.course_id = tc.course_id
             left join teacher t on t.user_id = tc.user_id
-            left join major m on t.major_id = m.major_id
             left join sys_user su on su.user_id = t.user_id
             left join student_course sc on sc.teach_id = tc.teach_id
         where

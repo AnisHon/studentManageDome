@@ -1,7 +1,14 @@
 package com.anishan.dome.mapper;
 
+import com.anishan.dome.domain.entity.Student;
 import com.anishan.dome.domain.entity.Teacher;
+import com.anishan.dome.domain.vo.StudentVo;
+import com.anishan.dome.domain.vo.TeacherVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -11,6 +18,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface TeacherMapper extends BaseMapper<Teacher> {
 
+    List<TeacherVo> selectTeacherVo(Page<Teacher> page, LambdaQueryWrapper<Teacher> wrapper);
 }
 
 

@@ -7,10 +7,24 @@
     <resultMap id="BaseResultMap" type="com.anishan.dome.domain.entity.Teacher">
             <id property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="majorId" column="major_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        user_id,title,major_id
-    </sql>
+
+    <select id="selectTeacherVo" resultType="com.anishan.dome.domain.vo.TeacherVo">
+        select
+            t.user_id as user_id,
+            t.institution as institution,
+            t.title as title,
+            work_number,
+            u.username as username,
+            birthday,
+            gender,
+            t.create_time as create_time,
+            t.update_time as update_time
+        from teacher t
+                 left join sys_user u on t.user_id = u.user_id
+
+            ${ew.customSqlSegment}
+    </select>
+
 </mapper>
