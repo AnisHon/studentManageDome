@@ -2,15 +2,17 @@ package com.anishan.dome.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import com.anishan.dome.controller.StudentDto;
+import com.anishan.dome.domain.dto.StudentDto;
 import com.anishan.dome.domain.dto.StudentQuery;
 import com.anishan.dome.domain.entity.Student;
 import com.anishan.dome.domain.entity.SysUser;
 import com.anishan.dome.domain.vo.PageResponse;
 import com.anishan.dome.domain.vo.StudentVo;
+import com.anishan.dome.enumeration.RoleEnum;
 import com.anishan.dome.mapper.StudentMapper;
 import com.anishan.dome.service.StudentService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
@@ -36,8 +38,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
     public PageResponse<StudentVo> queryVo(StudentQuery query) {
         LambdaQueryWrapper<Student> wrapper = query.queryWrapper();
         Page<Student> page = query.queryPage();
+        page.setSearchCount(false);
         List<StudentVo> studentVos = studentMapper.selectStudentVo(page, wrapper);
-        return PageResponse.build(page.getTotal(), studentVos);
+        Long total = studentMapper.selectCount(new QueryWrapper<>());
+
+        return PageResponse.build(total, studentVos);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
     public Boolean saveStudent(StudentDto entity) {
         Student student = BeanUtil.copyProperties(entity, Student.class);
         SysUser sysUser = BeanUtil.copyProperties(entity, SysUser.class);
+        sysUser.setRole(RoleEnum.Student);
         sysUser.setUserId(null);
         boolean b = Db.save(sysUser);
         student.setUserId(sysUser.getUserId());

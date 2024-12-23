@@ -15,9 +15,10 @@ import java.io.Serializable;
 @TableName(value ="teacher_course")
 @Data
 public class TeacherCourse implements Serializable {
-    /**
-     *
-     */
+
+    @ApiModelProperty("任教课程ID")
+    private Long teachId;
+
     @ApiModelProperty("课程ID")
     private Long courseId;
 

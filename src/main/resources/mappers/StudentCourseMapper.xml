@@ -5,12 +5,82 @@
 <mapper namespace="com.anishan.dome.mapper.StudentCourseMapper">
 
     <resultMap id="BaseResultMap" type="com.anishan.dome.domain.entity.StudentCourse">
-            <id property="courseId" column="course_id" jdbcType="BIGINT"/>
+            <id property="teachId" column="teach_id" jdbcType="BIGINT"/>
             <id property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="score" column="score" jdbcType="DECIMAL"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        course_id,user_id,score
-    </sql>
+    <delete id="deleteBatchInSchoolYear">
+        <foreach collection="e in list">
+            delete from student_course
+                   where
+                       user_id = e.userId and
+                       teach_id = e.teachId and
+                       (select c.school_year from teacher_course t left join course c on t.course_id = c.course_id) = #{year}
+        </foreach>
+    </delete>
+
+    <resultMap id="EnrollCourseMap" type="com.anishan.dome.domain.vo.EnrollCourse">
+        <id property="courseId" column="course_id"/>
+        <result property="courseName" column="user_id"/>
+        <result property="credit" column="user_id"/>
+        <result property="duration" column="user_id"/>
+        <result property="schoolYear" column="score"/>
+        <result property="teacherName" column="score"/>
+        <result property="institution" column="score"/>
+    </resultMap>
+
+    <select id="selectAvailable" resultMap="EnrollCourseMap">
+        select
+            c.course_id as course_id,
+            c.course_name as course_name,
+            c.credit as credit,
+            c.duration as duration,
+            c.school_year as school_year,
+            su.username as username,
+            m.institution as institution
+        from teacher_course tc
+            left join course c on c.course_id = tc.course_id
+            left join teacher t on t.user_id = tc.user_id
+            left join major m on t.major_id = m.major_id
+            left join sys_user su on su.user_id = t.user_id
+
+        ${ew.customSqlSegment}
+
+        limit ${limit}, ${offset}
+
+    </select>
+
+
+    <select id="countAvailable" resultType="long">
+        select
+            count(*)
+        from teacher_course tc
+            left join course c on c.course_id = tc.course_id
+            left join teacher t on t.user_id = tc.user_id
+            left join major m on t.major_id = m.major_id
+            left join sys_user su on su.user_id = t.user_id
+
+            ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectByUser" resultMap="EnrollCourseMap">
+        select
+            c.course_id as course_id,
+            c.course_name as course_name,
+            c.credit as credit,
+            c.duration as duration,
+            c.school_year as school_year,
+            su.username as username,
+            m.institution as institution
+        from teacher_course tc
+            left join course c on c.course_id = tc.course_id
+            left join teacher t on t.user_id = tc.user_id
+            left join major m on t.major_id = m.major_id
+            left join sys_user su on su.user_id = t.user_id
+            left join student_course sc on sc.teach_id = tc.teach_id
+        where
+            c.school_year = #{schoolYear} and
+            sc.user_id = #{userId}
+    </select>
 </mapper>

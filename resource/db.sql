@@ -128,38 +128,42 @@ create table course
 
 
 
-# -----------------------------------------------------
-# 8. 选课表
-# -----------------------------------------------------
-drop table if exists student_course;
-create table student_course
-(
-    course_id bigint        not null comment '课程ID',
-    user_id   bigint        not null comment '学生id',
-    score     decimal(3, 2) null     comment '得分',
-    primary key (course_id, user_id),
-    constraint sc_fk_user_id
-        foreign key student_course(user_id) references student(user_id),
-    constraint sc_fk_course_id
-        foreign key student_course(course_id) references course(course_id)
-) engine=InnoDB comment '选课表';
 
 
 # -----------------------------------------------------
-# 9. 任教表
+# 8. 任教表
 # -----------------------------------------------------
 drop table if exists teacher_course;
 create table teacher_course
 (
+    teach_id  bigint
+        primary key                  not null comment '任教课程ID',
     course_id bigint        not null comment '课程ID',
     user_id   bigint        not null comment '教师id',
-    primary key (course_id, user_id),
+    unique key (course_id, user_id),
     constraint tc_fk_user_id
         foreign key teacher_course(user_id) references teacher(user_id),
     constraint tc_fk_course_id
         foreign key teacher_course(course_id) references course(course_id)
 
 ) engine=InnoDB comment '任教表';
+
+
+# -----------------------------------------------------
+# 9. 选课表
+# -----------------------------------------------------
+drop table if exists student_course;
+create table student_course
+(
+    teach_id  bigint        not null comment '任教课程ID',
+    user_id   bigint        not null comment '学生id',
+    score     decimal(3, 2) null     comment '得分',
+    primary key (teach_id, user_id),
+    constraint sc_fk_user_id
+        foreign key student_course(user_id) references student(user_id),
+    constraint sc_fk_teach_id
+        foreign key student_course(teach_id) references teacher_course(teach_id)
+) engine=InnoDB comment '选课表';
 
 # -----------------------------------------------------
 # 10. 标记表

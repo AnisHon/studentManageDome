@@ -2,6 +2,7 @@ package com.anishan.dome.controller;
 
 import com.anishan.dome.domain.AjaxResponse;
 import com.anishan.dome.domain.dto.BaseQueryParam;
+import com.anishan.dome.domain.entity.BaseEntity;
 import com.anishan.dome.domain.vo.PageResponse;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +30,7 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @GetMapping("/list")
     @ApiOperation("查询，分页接口")
-    public AjaxResponse<PageResponse<T>> list(K query) {
-        System.out.println(query);
+    public AjaxResponse<PageResponse<T>> list(@Validated K query) {
         Page<T> tPage = query.queryPage();
         LambdaQueryWrapper<T> wrapper = query.queryWrapper();
 
@@ -59,6 +60,9 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
                         throw new RuntimeException(e);
                     }
                 });
+        if (entity instanceof BaseEntity) {
+            ((BaseEntity) entity).setCreateTime(LocalDateTime.now());
+        }
         return AjaxResponse.ok(service.save(entity));
     }
 

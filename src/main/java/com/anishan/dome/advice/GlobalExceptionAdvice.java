@@ -2,12 +2,18 @@ package com.anishan.dome.advice;
 
 import cn.hutool.http.HttpStatus;
 import com.anishan.dome.domain.AjaxResponse;
+import com.anishan.dome.enumeration.LoginErrorEnum;
+import com.anishan.dome.exception.AuthException;
 import com.anishan.dome.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.binding.BindingException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,6 +29,7 @@ public class GlobalExceptionAdvice {
 
     @ResponseBody
     @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
     public AjaxResponse<Void> handleRuntimeException(Exception e) {
         log.error(e.getMessage(), e);
         return AjaxResponse.error(HttpStatus.HTTP_INTERNAL_ERROR, e.getMessage());
@@ -30,8 +37,22 @@ public class GlobalExceptionAdvice {
 
     @ResponseBody
     @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
     public AjaxResponse<Void> handleBusinessException(BusinessException e) {
         return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(AuthException.class)
+    public AjaxResponse<Void> handleAuthException(AuthException e, HttpServletResponse response) {
+        int respCode = 0;
+        if (e.getLoginErrorEnum() == LoginErrorEnum.IllegalState) {
+            respCode = HttpStatus.HTTP_UNAUTHORIZED;
+        } else {
+            respCode = HttpStatus.HTTP_BAD_REQUEST;
+        }
+        response.setStatus(respCode);
+        return AjaxResponse.error(respCode, e.getMessage());
     }
 
     @ResponseBody
@@ -53,6 +74,12 @@ public class GlobalExceptionAdvice {
         return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, msg.toString());
     }
 
+    @ResponseBody
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "JSON格式错误");
+    }
 
 
 

@@ -1,6 +1,7 @@
 package com.anishan.dome.domain.dto;
 
 import cn.hutool.core.util.StrUtil;
+import com.anishan.dome.annotation.SelectAlias;
 import com.anishan.dome.domain.entity.BaseEntity;
 import com.anishan.dome.domain.entity.Student;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -26,25 +27,20 @@ import java.io.Serializable;
 @ApiModel("学生表")
 public class StudentQuery extends BaseQueryParam<Student> {
 
+    @SelectAlias("st")
     @ApiModelProperty("用户id")
     private Long userId;
 
+    @SelectAlias("st")
     @ApiModelProperty("班级id")
     private Long classId;
 
+    @SelectAlias("c")
     @ApiModelProperty("专业")
     private Long majorId;
 
+    @SelectAlias("u")
     @ApiModelProperty("姓名")
     private String username;
 
-    @Override
-    public LambdaQueryWrapper<Student> queryWrapper() {
-        return new QueryWrapper<Student>()
-                .eq(userId != null, "sys_user.user_id", userId)
-                .eq(classId != null, "class.class_id", classId)
-                .eq(majorId != null, "major.major_id", majorId)
-                .eq(!StrUtil.isEmpty(username), "sys_user.username", username)
-                .lambda();
-    }
 }

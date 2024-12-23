@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,13 +19,14 @@ import java.math.BigDecimal;
  */
 @TableName(value ="student_course")
 @Data
+@Accessors(chain = true)
 @ApiModel("课程表")
 public class StudentCourse implements Serializable {
     /**
      * 课程ID
      */
-    @ApiModelProperty("课程ID")
-    private Long courseId;
+    @ApiModelProperty("授课课程ID")
+    private Long teachId;
 
     /**
      *

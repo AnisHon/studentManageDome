@@ -1,5 +1,6 @@
 package com.anishan.dome.domain.dto;
 
+import com.anishan.dome.annotation.SelectAlias;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -32,16 +34,48 @@ public class BaseQueryParam<T> {
 
     public LambdaQueryWrapper<T> queryWrapper() {
 
+        return plainQueryWrapper().lambda();
+
+    }
+
+    public QueryWrapper<T> plainQueryWrapper() {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
 
         Class<?> clazz = this.getClass();
         Stream<Method> getters = Arrays
                 .stream(clazz.getMethods())
-                .filter(x -> x.getName().startsWith("get") && x.getDeclaringClass().equals(clazz));
-
+                .filter(x -> {
+                    boolean isGetter = x.getName().startsWith("get") || x.getName().startsWith("is");
+                    return isGetter && x.getDeclaringClass().equals(clazz);
+                });
         getters.forEach(x -> {
-            String column = StringUtils.camelToUnderline(x.getName().replaceFirst("get", ""));
 
+            String methodName = x.getName();
+            String fieldName;
+
+            if (methodName.startsWith("get")) {
+                fieldName = methodName.substring(3);
+            } else if (methodName.startsWith("is")) {
+                fieldName = methodName.substring(2);
+            } else {
+                return;
+            }
+
+            fieldName = StringUtils.firstToLowerCase(fieldName);
+
+
+            String column = StringUtils.camelToUnderline(fieldName);
+            try {
+
+                Field field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                SelectAlias annotation = field.getAnnotation(SelectAlias.class);
+                if (annotation != null) {
+                    column = annotation.value() + "." + column;
+                }
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 Object param = x.invoke(this);
 
@@ -57,7 +91,7 @@ public class BaseQueryParam<T> {
 
         });
 
-        return wrapper.lambda();
+        return wrapper;
 
     }
 

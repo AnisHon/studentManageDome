@@ -1,4 +1,4 @@
-package com.anishan.dome.controller;
+package com.anishan.dome.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -53,13 +53,6 @@ public class StudentDto {
     @NotNull
     @ApiModelProperty("性别 0 男 1女")
     private Integer gender;
-
-    /**
-     * (学生 1 辅导员 5 教师 10 管理员 20)
-     */
-    @NotNull
-    @ApiModelProperty("学生 1 辅导员 5 教师 10 管理员 20")
-    private Integer role;
 
     /**
      * 用户状态(0 正常，1 异常)

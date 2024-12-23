@@ -1,6 +1,6 @@
 package com.anishan.dome.service;
 
-import com.anishan.dome.controller.StudentDto;
+import com.anishan.dome.domain.dto.StudentDto;
 import com.anishan.dome.domain.dto.StudentQuery;
 import com.anishan.dome.domain.entity.Student;
 import com.anishan.dome.domain.vo.PageResponse;

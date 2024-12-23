@@ -1,5 +1,7 @@
 package com.anishan.dome.domain.entity;
 
+import com.anishan.dome.enumeration.RoleEnum;
+import com.anishan.dome.enumeration.UserStatus;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -62,13 +64,13 @@ public class SysUser extends BaseEntity implements Serializable {
      * (学生 1 辅导员 5 教师 10 管理员 20)
      */
     @ApiModelProperty("学生 1 辅导员 5 教师 10 管理员 20")
-    private Integer role;
+    private RoleEnum role;
 
     /**
      * 用户状态(0 正常，1 异常)
      */
     @ApiModelProperty("用户状态(0 正常，1 异常)")
-    private Integer status;
+    private UserStatus status;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
