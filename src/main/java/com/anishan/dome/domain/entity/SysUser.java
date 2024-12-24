@@ -12,8 +12,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.ibatis.annotations.Update;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -39,6 +42,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 工号
      */
+    @NotBlank(message = "工号不能为空")
     @ApiModelProperty("工号")
     private String workNumber;
 
@@ -46,7 +50,8 @@ public class SysUser extends BaseEntity implements Serializable {
      * 密码
      */
     @ApiModelProperty("密码")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,16}$\n", message = "密码必须包含数字和字母，长度6-16")
+    @NotNull
+    @Length(min = 8, max = 16)
     private String password;
 
     /**

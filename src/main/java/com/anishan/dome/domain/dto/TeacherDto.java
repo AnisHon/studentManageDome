@@ -3,8 +3,11 @@ package com.anishan.dome.domain.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Data
@@ -23,6 +26,7 @@ public class TeacherDto {
      * 工号
      */
     @NotNull
+    @NotEmpty
     @ApiModelProperty("工号")
     private String workNumber;
 
@@ -31,6 +35,7 @@ public class TeacherDto {
      */
     @NotNull
     @ApiModelProperty("密码")
+    @Length(min = 8, max = 16)
     private String password;
 
     /**

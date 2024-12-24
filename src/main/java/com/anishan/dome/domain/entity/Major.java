@@ -20,22 +20,14 @@ import java.io.Serializable;
 @Data
 @ApiModel("专业表")
 public class Major extends BaseEntity implements Serializable {
-    /**
-     *
-     */
+
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("专业id")
     private Long majorId;
 
-    /**
-     *
-     */
     @ApiModelProperty("专业名称")
     private String majorName;
 
-    /**
-     *
-     */
     @ApiModelProperty("学院名称")
     private String institution;
 

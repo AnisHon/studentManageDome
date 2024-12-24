@@ -6,10 +6,10 @@ import com.anishan.dome.domain.entity.SysUser;
 import com.anishan.dome.enumeration.RoleEnum;
 import com.anishan.dome.exception.BusinessException;
 import com.anishan.dome.service.SysUserService;
-import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +31,9 @@ public class UserController extends BaseController<SysUser, UserPageQuery> {
 
 
     @Override
-    public AjaxResponse<Boolean> save(SysUser entity) {
+    public AjaxResponse<Boolean> save(@RequestBody SysUser entity) {
         if (entity.getRole() != RoleEnum.Admin) {
-            throw new BusinessException("使用用户管理添加的用户一定是管理员");
+            throw new BusinessException("这里只能添加管理员账户");
         }
 
         String encode = passwordEncoder.encode(entity.getPassword());
@@ -42,14 +42,16 @@ public class UserController extends BaseController<SysUser, UserPageQuery> {
     }
 
     @Override
-    public AjaxResponse<Boolean> update(SysUser entity) {
+    public AjaxResponse<Boolean> update(@RequestBody SysUser entity) {
         if (entity.getRole() != RoleEnum.Admin) {
-            throw new BusinessException("使用用户管理添加的用户一定是管理员");
+            throw new BusinessException("角色不能修改");
         }
-
 
         String encode = passwordEncoder.encode(entity.getPassword());
         entity.setPassword(encode);
         return super.update(entity);
     }
+
+
+
 }

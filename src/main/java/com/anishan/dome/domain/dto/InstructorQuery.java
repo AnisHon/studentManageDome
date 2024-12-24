@@ -1,5 +1,6 @@
 package com.anishan.dome.domain.dto;
 
+import com.anishan.dome.annotation.SelectAlias;
 import com.anishan.dome.domain.entity.Instructor;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -21,10 +22,16 @@ import java.io.Serializable;
 @ApiModel("辅导员表")
 public class InstructorQuery extends BaseQueryParam<Instructor> {
 
+    @SelectAlias("ins")
     @ApiModelProperty("用户id")
     private Long userId;
 
-    @ApiModelProperty("专业id")
+    @SelectAlias("c")
+    @ApiModelProperty("专业")
     private Long majorId;
+
+    @SelectAlias("u")
+    @ApiModelProperty("姓名")
+    private String username;
 
 }

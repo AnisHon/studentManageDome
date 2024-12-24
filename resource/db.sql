@@ -178,3 +178,7 @@ create table mark
     constraint mark_instructor_fk
         foreign key mark(instructor_id) references instructor(user_id)
 ) engine=InnoDB comment '标记表';
+
+
+
+

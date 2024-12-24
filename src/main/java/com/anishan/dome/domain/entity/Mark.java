@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Date;
 @TableName(value ="mark")
 @Data
 @ApiModel("标记表")
+@Accessors(chain = true)
 public class Mark extends BaseEntity implements Serializable {
     /**
      *

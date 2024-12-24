@@ -9,7 +9,40 @@
             <id property="userId" column="user_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        course_id,user_id
-    </sql>
+    <select id="selectCourse" resultType="com.anishan.dome.domain.vo.EnrollCourse">
+        select
+            c.course_id as course_id,
+            c.course_name as course_name,
+            tc.teach_id as teach_id,
+            c.credit as credit,
+            c.duration as duration,
+            c.school_year as school_year,
+            su.username as username,
+            t.institution as institution
+        from teacher_course tc
+            left join course c on c.course_id = tc.course_id
+            left join teacher t on t.user_id = tc.user_id
+            left join sys_user su on su.user_id = t.user_id
+            left join student_course sc on sc.teach_id = tc.teach_id
+        where
+            c.school_year = #{schoolYear} and
+            t.user_id = #{teacherId}
+    </select>
+    <select id="selectTeacher" resultType="com.anishan.dome.domain.vo.TeacherVo">
+        select
+            t.user_id as user_id,
+            t.institution as institution,
+            t.title as title,
+            work_number,
+            u.username as username,
+            birthday,
+            gender,
+            t.create_time as create_time,
+            t.update_time as update_time
+        from teacher t
+            left join sys_user u on t.user_id = u.user_id
+            left join teacher_course tc on tc.user_id = u.user_id
+        where
+            tc.course_id = #{courseId}
+    </select>
 </mapper>

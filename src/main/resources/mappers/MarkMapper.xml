@@ -12,8 +12,25 @@
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        student_id,instructor_id,tag,
-        create_time,update_time
-    </sql>
+    
+    <delete id="deleteByInstructorIdAndStudentId">
+        <foreach collection="item in list">
+            delete from mark
+                   where
+                       student_id = #{item.studentId} and
+                       instructor_id = #{item.instructorId};
+
+        </foreach>
+    </delete>
+    <select id="listAllByInstructorId" resultType="com.anishan.dome.domain.vo.MarkVo">
+        select student_id,
+               username as student_name,
+               tag,
+               m.create_time as create_time,
+               m.update_time as update_time
+            from mark m
+        left join sys_user u on u.user_id = m.student_id
+        where m.instructor_id = #{instructorId}
+        ;
+    </select>
 </mapper>

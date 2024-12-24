@@ -1,17 +1,17 @@
 package com.anishan.dome.domain.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Data
-public class StudentDto {
+@ApiModel("辅导员表单")
+public class InstructorDto {
     @NotNull(groups = Update.class)
     @ApiModelProperty("用户id")
     private Long userId;
@@ -19,14 +19,11 @@ public class StudentDto {
     @ApiModelProperty("专业id")
     private Long majorId;
 
-    @ApiModelProperty("班级id")
-    private Long classId;
 
     /**
      * 工号
      */
     @NotNull
-    @NotEmpty
     @ApiModelProperty("工号")
     private String workNumber;
 
@@ -35,7 +32,7 @@ public class StudentDto {
      */
     @NotNull
     @ApiModelProperty("密码")
-    @Length(min = 8, max = 16)
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,16}$\n", message = "密码必须包含数字和字母，长度6-16")
     private String password;
 
     /**
@@ -65,6 +62,4 @@ public class StudentDto {
     @NotNull
     @ApiModelProperty("用户状态(0 正常，1 异常)")
     private Integer status;
-
-
 }

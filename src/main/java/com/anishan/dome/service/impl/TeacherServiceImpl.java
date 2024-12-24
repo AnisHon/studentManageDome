@@ -40,7 +40,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
         Page<Teacher> page = query.queryPage();
         page.setSearchCount(false);
         List<TeacherVo> teacherVo = teacherMapper.selectTeacherVo(page, wrapper);
-        Long total = teacherMapper.selectCount(new QueryWrapper<>());
+        Long total = teacherMapper.countTotal(wrapper);
 
         return PageResponse.build(total, teacherVo);
     }

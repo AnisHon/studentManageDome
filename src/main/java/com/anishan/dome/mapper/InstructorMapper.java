@@ -1,7 +1,13 @@
 package com.anishan.dome.mapper;
 
 import com.anishan.dome.domain.entity.Instructor;
+import com.anishan.dome.domain.vo.InstructorVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -11,6 +17,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface InstructorMapper extends BaseMapper<Instructor> {
 
+    List<InstructorVo> selectInstructVo(@Param("page") Page<Instructor> page, @Param("ew") LambdaQueryWrapper<Instructor> wrapper);
+    Long countTotal(@Param("ew") LambdaQueryWrapper<Instructor> wrapper);
 }
 
 

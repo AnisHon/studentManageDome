@@ -57,4 +57,9 @@ public class ClassController {
         return AjaxResponse.ok(classService.updateById(entity));
     }
 
+    @GetMapping("/{classId}")
+    public AjaxResponse<Clazz> get(@PathVariable Long classId) {
+        return AjaxResponse.ok(classService.getById(classId));
+    }
+
 }

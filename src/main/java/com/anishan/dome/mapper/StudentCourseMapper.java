@@ -1,10 +1,15 @@
 package com.anishan.dome.mapper;
 
+import com.anishan.dome.domain.dto.StatisticFrom;
 import com.anishan.dome.domain.entity.StudentCourse;
 import com.anishan.dome.domain.entity.TeacherCourse;
 import com.anishan.dome.domain.vo.EnrollCourse;
+import com.anishan.dome.domain.vo.ScoreVo;
+import com.anishan.dome.domain.vo.StatisticResult;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -23,6 +28,16 @@ public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
     Long countAvailable(@Param("schoolYear") int schoolYear);
 
     List<EnrollCourse> selectByUser(@Param("userId") Long userId, @Param("schoolYear") int schoolYear);
+
+    List<ScoreVo> selectScoreVos(@Param("page")Page<?> page, @Param("ew") Wrapper<?> wrapper);
+
+    Long countScores(@Param("schoolYear") int schoolYear);
+
+    void removeScore(@Param("list") List<StudentCourse> studentCourse);
+
+    List<StatisticResult> statistic(@Param("ew") LambdaQueryWrapper<StudentCourse> wrapper, @Param("page") Page<StudentCourse> page);
+
+    Long count(@Param("ew") LambdaQueryWrapper<StudentCourse> wrapper);
 }
 
 

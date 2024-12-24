@@ -19,6 +19,14 @@
                        (select c.school_year from teacher_course t left join course c on t.course_id = c.course_id) = #{year}
         </foreach>
     </delete>
+    <update id="removeScore">
+        <foreach collection="item in list">
+            update student_course set score = null
+            where teach_id = #{item.teach_id} and
+                  user_id = #{user_id}
+        </foreach>
+    </update>
+
 
     <resultMap id="EnrollCourseMap" type="com.anishan.dome.domain.vo.EnrollCourse">
         <id property="courseId" column="course_id"/>
@@ -64,6 +72,7 @@
         select
             c.course_id as course_id,
             c.course_name as course_name,
+            tc.teach_id as teach_id,
             c.credit as credit,
             c.duration as duration,
             c.school_year as school_year,
@@ -77,5 +86,62 @@
         where
             c.school_year = #{schoolYear} and
             sc.user_id = #{userId}
+    </select>
+    <select id="selectScoreVos" resultType="com.anishan.dome.domain.vo.ScoreVo">
+        select
+            sc.user_id as studentId,
+            c.course_id as course_id,
+            s.class_id as class_id,
+            su.username as student_name,
+            c.course_name as course_name,
+            c.school_year as school_year,
+            sc.score as score
+        from student_course sc
+        left join teacher_course tc on tc.teach_id = sc.teach_id
+        left join student s on s.user_id = sc.user_id
+        left join sys_user su on su.user_id = s.user_id
+        left join course c on tc.course_id = c.course_id
+
+        ${ew.customSqlSegment}
+    </select>
+    <select id="countScores" resultType="java.lang.Long">
+        select
+            count(*)
+        from student_course sc
+                 left join teacher_course tc on tc.teach_id = sc.teach_id
+                 left join course c on tc.course_id = c.course_id
+        where c.school_year = #{schoolYear}
+    </select>
+    <select id="statistic" resultType="com.anishan.dome.domain.vo.StatisticResult">
+        select
+            c.class_id as class_id,
+            tc.teach_id as teach_id,
+            c.class_name as class_name,
+            cour.course_name as course_name,
+            avg(sc.score) as average_score,
+            max(sc.score) as max_score,
+            min(sc.score) as min_score,
+            COUNT(CASE WHEN score > 60 THEN 1 END) as pass,
+            COUNT(CASE WHEN score > 60 THEN 1 END) as fail
+
+        from student_course sc
+        left join student s on s.user_id = sc.user_id
+        left join class c on c.major_id = s.class_id
+        left join teacher_course tc on sc.teach_id = tc.teach_id
+        left join course cour on cour.course_id = tc.course_id
+            ${ew.customSqlSegment}
+        group by c.class_id, tc.teach_id
+
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select
+            count(*)
+        from student_course sc
+                 left join student s on s.user_id = sc.user_id
+                 left join class c on c.major_id = s.class_id
+                 left join teacher_course tc on sc.teach_id = tc.teach_id
+                 left join course cour on cour.course_id = tc.course_id
+            ${ew.customSqlSegment}
+        group by c.class_id, tc.teach_id
     </select>
 </mapper>

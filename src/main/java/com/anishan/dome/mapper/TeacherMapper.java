@@ -7,6 +7,7 @@ import com.anishan.dome.domain.vo.TeacherVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ import java.util.List;
 */
 public interface TeacherMapper extends BaseMapper<Teacher> {
 
-    List<TeacherVo> selectTeacherVo(Page<Teacher> page, LambdaQueryWrapper<Teacher> wrapper);
+    List<TeacherVo> selectTeacherVo(@Param("page") Page<Teacher> page, @Param("ew") LambdaQueryWrapper<Teacher> wrapper);
+    Long countTotal(@Param("ew") LambdaQueryWrapper<Teacher> wrapper);
+
 }
 
 

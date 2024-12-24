@@ -12,4 +12,30 @@
     <sql id="Base_Column_List">
         user_id,major_id
     </sql>
+    <select id="selectInstructVo" resultType="com.anishan.dome.domain.vo.InstructorVo">
+        select
+            ins.user_id as user_id,
+            work_number,
+            u.username as username,
+            ins.major_id as marjor_id,
+            birthday,
+            gender,
+            ins.create_time as create_time,
+            ins.update_time as update_time,
+            m.major_name as  major_name,
+            m.institution as institution
+        from instructor ins
+                 left join sys_user u on ins.user_id = u.user_id
+                 left join major m on ins.major_id = m.major_id
+
+            ${ew.customSqlSegment}
+    </select>
+    <select id="countTotal" resultType="java.lang.Long">
+        select
+            count(*)
+        from instructor ins
+                 left join sys_user u on ins.user_id = u.user_id
+                 left join major m on ins.major_id = m.major_id
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

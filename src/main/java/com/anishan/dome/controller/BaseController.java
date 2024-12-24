@@ -47,7 +47,7 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @PostMapping("/")
     @ApiOperation("添加接口")
-    public AjaxResponse<Boolean> save(@Validated  @RequestBody T entity) {
+    public AjaxResponse<Boolean> save(@Validated @RequestBody T entity) {
         Arrays
                 .stream(entity.getClass().getDeclaredFields())
                 .filter(x -> x.isAnnotationPresent(TableId.class))

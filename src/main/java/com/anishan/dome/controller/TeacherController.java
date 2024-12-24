@@ -1,9 +1,11 @@
 package com.anishan.dome.controller;
 
 import com.anishan.dome.domain.AjaxResponse;
+import com.anishan.dome.domain.dto.StudentQuery;
 import com.anishan.dome.domain.dto.TeacherDto;
 import com.anishan.dome.domain.dto.TeacherQuery;
 import com.anishan.dome.domain.vo.PageResponse;
+import com.anishan.dome.domain.vo.StudentVo;
 import com.anishan.dome.domain.vo.TeacherVo;
 import com.anishan.dome.service.TeacherService;
 import io.swagger.annotations.Api;
@@ -23,6 +25,21 @@ public class TeacherController {
     @Resource
     private TeacherService teacherService;
 
+    @GetMapping("/{userId}")
+    @ApiOperation("获取接口")
+    public AjaxResponse<TeacherVo> get(@PathVariable Long userId) {
+        TeacherQuery teacherQuery = new TeacherQuery();
+        teacherQuery.setUserId(userId);
+        teacherQuery.setPageNum(1L);
+        teacherQuery.setPageSize(10L);
+        PageResponse<TeacherVo> teacherVoPageResponse = teacherService.queryVo(teacherQuery);
+        List<TeacherVo> rows = teacherVoPageResponse.getRows();
+        if (rows.isEmpty()) {
+            return AjaxResponse.ok(null);
+        } else {
+            return AjaxResponse.ok(rows.get(0));
+        }
+    }
 
 
 

@@ -1,7 +1,19 @@
 package com.anishan.dome.enumeration;
 
-public enum Gender {
+import lombok.Getter;
 
-    Male, Female
+@Getter
+public enum Gender implements Enum<Integer> {
 
+    Male(0), Female(1);
+
+    private final Integer value;
+    Gender(Integer value) {
+        this.value = value;
+    }
+
+    @Override
+    public Integer getValue() {
+        return this.value;
+    }
 }

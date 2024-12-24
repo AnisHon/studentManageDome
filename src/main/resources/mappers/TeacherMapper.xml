@@ -26,5 +26,13 @@
 
             ${ew.customSqlSegment}
     </select>
+    <select id="countTotal" resultType="java.lang.Long">
+        select
+           count(*)
+        from teacher t
+                 left join sys_user u on t.user_id = u.user_id
+
+            ${ew.customSqlSegment}
+    </select>
 
 </mapper>

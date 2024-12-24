@@ -1,7 +1,11 @@
 package com.anishan.dome.mapper;
 
 import com.anishan.dome.domain.entity.Mark;
+import com.anishan.dome.domain.vo.MarkVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -11,6 +15,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface MarkMapper extends BaseMapper<Mark> {
 
+    void deleteByInstructorIdAndStudentId(@Param("list")List<Mark> marks);
+
+    List<MarkVo> listAllByInstructorId(@Param("instructorId") Long instructorId);
 }
 
 

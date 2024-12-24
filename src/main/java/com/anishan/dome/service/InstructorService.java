@@ -1,7 +1,13 @@
 package com.anishan.dome.service;
 
+import com.anishan.dome.domain.dto.InstructorDto;
+import com.anishan.dome.domain.dto.InstructorQuery;
 import com.anishan.dome.domain.entity.Instructor;
+import com.anishan.dome.domain.vo.InstructorVo;
+import com.anishan.dome.domain.vo.PageResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author anishan
@@ -10,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface InstructorService extends IService<Instructor> {
 
+    PageResponse<InstructorVo> queryVo(InstructorQuery query);
+
+    Boolean removeInstructorByIds(List<Long> userId);
+
+    Boolean saveInstructor(InstructorDto entity);
+
+    Boolean updateInstructor(InstructorDto entity);
 }
