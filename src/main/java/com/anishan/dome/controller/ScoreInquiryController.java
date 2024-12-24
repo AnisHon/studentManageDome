@@ -28,8 +28,8 @@ public class ScoreInquiryController {
         ScoreQuery scoreQuery = new ScoreQuery();
         scoreQuery.setPageNum(1L);
         scoreQuery.setPageSize(100L);
-//        Long userId = AuthUtils.getUserId();
-        scoreQuery.setUserId(1L);
+        Long userId = AuthUtils.getUserId();
+        scoreQuery.setUserId(userId);
         List<ScoreVo> rows = studentCourseService.queryScore(scoreQuery, null).getRows();
         return AjaxResponse.ok(rows);
     }

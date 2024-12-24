@@ -22,11 +22,11 @@ public class QueryEnrollCourse extends BaseQueryParam<TeacherCourse> {
     @ApiModelProperty("课程名称")
     private String courseName;
 
-    @SelectAlias("t")
+    @SelectAlias("su")
     @ApiModelProperty("任课教师姓名")
-    private String teacherName;
+    private String username;
 
-    @SelectAlias("m")
+    @SelectAlias("t")
     @ApiModelProperty("学院名")
     private String institution;
 }

@@ -23,6 +23,9 @@ public class ScoreVo {
     @ApiModelProperty("分数")
     private BigDecimal score;
 
+    @ApiModelProperty("学分")
+    private Long credit;
+
     @ApiModelProperty("学生名")
     private String studentName;
 

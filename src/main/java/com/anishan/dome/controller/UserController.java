@@ -43,9 +43,7 @@ public class UserController extends BaseController<SysUser, UserPageQuery> {
 
     @Override
     public AjaxResponse<Boolean> update(@RequestBody SysUser entity) {
-        if (entity.getRole() != RoleEnum.Admin) {
-            throw new BusinessException("角色不能修改");
-        }
+        entity.setRole(null);
 
         String encode = passwordEncoder.encode(entity.getPassword());
         entity.setPassword(encode);

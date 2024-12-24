@@ -79,11 +79,15 @@ public class BaseQueryParam<T> {
             try {
                 Object param = x.invoke(this);
 
-                if (param instanceof String) {
-                    wrapper.likeRight(column, param);
-                } else {
-                    wrapper.eq(param != null, column, param);
+                if (param != null) {
+                    if (param instanceof String) {
+                        wrapper.likeRight(column, param);
+                    } else {
+                        wrapper.eq(column, param);
+                    }
                 }
+
+
 
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);

@@ -28,24 +28,17 @@
     </update>
 
 
-    <resultMap id="EnrollCourseMap" type="com.anishan.dome.domain.vo.EnrollCourse">
-        <id property="courseId" column="course_id"/>
-        <result property="courseName" column="user_id"/>
-        <result property="credit" column="user_id"/>
-        <result property="duration" column="user_id"/>
-        <result property="schoolYear" column="score"/>
-        <result property="teacherName" column="score"/>
-        <result property="institution" column="score"/>
-    </resultMap>
 
-    <select id="selectAvailable" resultMap="EnrollCourseMap">
+
+    <select id="selectAvailable" resultType="com.anishan.dome.domain.vo.EnrollCourse">
         select
+            tc.teach_id as teach_id,
             c.course_id as course_id,
             c.course_name as course_name,
             c.credit as credit,
             c.duration as duration,
             c.school_year as school_year,
-            su.username as username,
+            su.username as teacher_name,
             t.institution as institution
         from teacher_course tc
             left join course c on c.course_id = tc.course_id
@@ -54,21 +47,22 @@
 
         ${ew.customSqlSegment}
 
-        limit ${limit}, ${offset}
 
     </select>
 
 
     <select id="countAvailable" resultType="long">
         select
-            count(*)
+           count(*)
         from teacher_course tc
-            left join course c on c.course_id = tc.course_id
+                 left join course c on c.course_id = tc.course_id
+                 left join teacher t on t.user_id = tc.user_id
+                 left join sys_user su on su.user_id = t.user_id
 
-        where c.school_year = #{schoolYear}
+            ${ew.customSqlSegment}
     </select>
 
-    <select id="selectByUser" resultMap="EnrollCourseMap">
+    <select id="selectByUser" resultType="com.anishan.dome.domain.vo.EnrollCourse">
         select
             c.course_id as course_id,
             c.course_name as course_name,
@@ -76,7 +70,7 @@
             c.credit as credit,
             c.duration as duration,
             c.school_year as school_year,
-            su.username as username,
+            su.username as teacher_name,
             t.institution as institution
         from teacher_course tc
             left join course c on c.course_id = tc.course_id
@@ -89,9 +83,11 @@
     </select>
     <select id="selectScoreVos" resultType="com.anishan.dome.domain.vo.ScoreVo">
         select
+            tc.teach_id as teach_id,
             sc.user_id as studentId,
             c.course_id as course_id,
             s.class_id as class_id,
+            credit,
             su.username as student_name,
             c.course_name as course_name,
             c.school_year as school_year,
@@ -110,7 +106,11 @@
         from student_course sc
                  left join teacher_course tc on tc.teach_id = sc.teach_id
                  left join course c on tc.course_id = c.course_id
-        where c.school_year = #{schoolYear}
+        <where>
+            <if test="schoolYear != null">
+                c.school_year = #{schoolYear}
+            </if>
+        </where>
     </select>
     <select id="statistic" resultType="com.anishan.dome.domain.vo.StatisticResult">
         select

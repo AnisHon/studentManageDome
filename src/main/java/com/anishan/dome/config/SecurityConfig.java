@@ -36,19 +36,19 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("**")); // 允许跨域请求的域名
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 允许的请求方法
-        configuration.setAllowedHeaders(Arrays.asList("Token", "Content-Type", "X-Requested-With")); // 允许的请求头
-        configuration.setAllowCredentials(true); // 允许携带凭证
-        configuration.setMaxAge(3600L); // 缓存预检请求的时间
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // 对所有请求路径应用 CORS 配置
-        return source;
-    }
+//
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("**")); // 允许跨域请求的域名
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 允许的请求方法
+//        configuration.setAllowedHeaders(Arrays.asList("Token", "Content-Type", "X-Requested-With")); // 允许的请求头
+//        configuration.setAllowCredentials(true); // 允许携带凭证
+//        configuration.setMaxAge(3600L); // 缓存预检请求的时间
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration); // 对所有请求路径应用 CORS 配置
+//        return source;
+//    }
 
 
     @Bean

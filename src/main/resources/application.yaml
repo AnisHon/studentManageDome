@@ -56,7 +56,7 @@ mybatis-plus:
   type-aliases-package: com.anishan.dome.mybatis.entity
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
-
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:

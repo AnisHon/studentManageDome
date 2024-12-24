@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel("分数查询表单")
@@ -29,6 +31,7 @@ public class ScoreQuery extends BaseQueryParam<StudentCourse>{
     private String courseName;
 
     @SelectAlias("c")
+    @NotNull
     @ApiModelProperty("学年")
     private Integer schoolYear;
 

@@ -14,12 +14,14 @@ import com.anishan.dome.utils.SchoolYearUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Slf4j
 @Api("选课API")
 @RestController
 @RequestMapping("/student/course")
@@ -66,6 +68,7 @@ public class CourseSelectionController {
     @GetMapping()
     @ApiOperation("查看所有能选的课")
     public AjaxResponse<PageResponse<EnrollCourse>> list(@Validated QueryEnrollCourse query) {
+        log.info(query.toString());
         PageResponse<EnrollCourse> courses = studentCourseService.listAvailable(query);
         return AjaxResponse.ok(courses);
     }

@@ -18,6 +18,6 @@ public class LoginForm {
     private String token;
 
     @ApiModelProperty("验证码")
-    private String captcha;
+    private String code;
 
 }

@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 @RequiredArgsConstructor()
 public class AuthUtils {
@@ -36,7 +38,7 @@ public class AuthUtils {
         UUID uuid = UUID.fastUUID();
 
         String captchaKey = getCaptchaKey(uuid.toString());
-        stringRedisTemplate.opsForValue().set(captchaKey, gif.getCode());
+        stringRedisTemplate.opsForValue().set(captchaKey, gif.getCode(), Duration.ofSeconds(60));
 
         CaptchaResponse captcha = new CaptchaResponse();
         captcha.setImg(gif.getImageBase64Data());
@@ -78,6 +80,7 @@ public class AuthUtils {
         if (!(principal instanceof LoginUser)) {
             throw new AuthException("未登录", LoginErrorEnum.IllegalState);
         }
+//        System.out.println(principal);
         return (LoginUser) principal;
     }
 

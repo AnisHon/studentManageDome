@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 * @createDate 2024-12-23 11:02:13
 */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, StudentCourse>
     implements StudentCourseService {
@@ -93,18 +95,16 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
     public PageResponse<EnrollCourse> listAvailable(QueryEnrollCourse query) {
         int schoolYear = schoolYearUtil.getSchoolYear();
 
+        Page<TeacherCourse> page = query.queryPage();
         QueryWrapper<TeacherCourse> wrapper = query.plainQueryWrapper();
 
         wrapper.eq("c.school_year", schoolYear);
 
-        Long pageNum = query.getPageNum();
-        Long pageSize = query.getPageSize();
+        page.setSearchCount(false);
 
-        Long offset = (pageNum - 1) * pageSize;
+        List<EnrollCourse> enrollCourses = studentCourseMapper.selectAvailable(page, wrapper);
 
-        List<EnrollCourse> enrollCourses = studentCourseMapper.selectAvailable(wrapper, offset, pageSize);
-
-        Long total = studentCourseMapper.countAvailable(schoolYear);
+        Long total = studentCourseMapper.countAvailable(wrapper);
 
         return PageResponse.build(total, enrollCourses);
     }
@@ -135,6 +135,7 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
         page.setSearchCount(false);
         List<ScoreVo> scoreVos = studentCourseMapper.selectScoreVos(page, wrapper);
 
+        log.info(query.toString());
         Long l = studentCourseMapper.countScores(query.getSchoolYear());
 
         return PageResponse.build(l, scoreVos);

@@ -33,6 +33,8 @@ public class Teacher extends BaseEntity implements Serializable {
     @ApiModelProperty("昵称")
     private String title;
 
+    @ApiModelProperty("学院")
+    private String institution;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

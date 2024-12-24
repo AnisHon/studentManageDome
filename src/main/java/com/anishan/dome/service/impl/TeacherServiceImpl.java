@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,8 @@ import java.util.List;
 public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
     implements TeacherService {
     private final TeacherMapper teacherMapper;
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public PageResponse<TeacherVo> queryVo(TeacherQuery query) {
         LambdaQueryWrapper<Teacher> wrapper = query.queryWrapper();
@@ -62,6 +65,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
         SysUser sysUser = BeanUtil.copyProperties(entity, SysUser.class);
         sysUser.setRole(RoleEnum.Teacher);
         sysUser.setUserId(null);
+        sysUser.setPassword(passwordEncoder.encode(entity.getPassword()));
         boolean b = Db.save(sysUser);
         teacher.setUserId(sysUser.getUserId());
         b &= this.save(teacher);

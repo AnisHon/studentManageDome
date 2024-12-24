@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +31,11 @@ public class InstructorServiceImpl extends ServiceImpl<InstructorMapper, Instruc
     implements InstructorService {
 
     private final InstructorMapper instructorMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public InstructorServiceImpl(InstructorMapper instructorMapper) {
+    public InstructorServiceImpl(InstructorMapper instructorMapper, PasswordEncoder passwordEncoder) {
         this.instructorMapper = instructorMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,6 +65,7 @@ public class InstructorServiceImpl extends ServiceImpl<InstructorMapper, Instruc
         SysUser sysUser = BeanUtil.copyProperties(entity, SysUser.class);
         sysUser.setRole(RoleEnum.Instructor);
         sysUser.setUserId(null);
+        sysUser.setPassword(passwordEncoder.encode(entity.getPassword()));
         boolean b = Db.save(sysUser);
         student.setUserId(sysUser.getUserId());
         b &= this.save(student);

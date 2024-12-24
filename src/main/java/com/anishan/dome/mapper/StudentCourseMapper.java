@@ -24,14 +24,14 @@ public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
 
     void deleteBatchInSchoolYear(@Param("list") List<StudentCourse> courses, @Param("year") int year);
 
-    List<EnrollCourse> selectAvailable(@Param("ew") Wrapper<TeacherCourse> wrapper, @Param("offset") Long offset, @Param("limit") Long limit);
-    Long countAvailable(@Param("schoolYear") int schoolYear);
+    List<EnrollCourse> selectAvailable(@Param("page") Page<TeacherCourse> page, @Param("ew") Wrapper<TeacherCourse> wrapper);
+    Long countAvailable(@Param("ew") Wrapper<TeacherCourse> wrapper);
 
     List<EnrollCourse> selectByUser(@Param("userId") Long userId, @Param("schoolYear") int schoolYear);
 
     List<ScoreVo> selectScoreVos(@Param("page")Page<?> page, @Param("ew") Wrapper<?> wrapper);
 
-    Long countScores(@Param("schoolYear") int schoolYear);
+    Long countScores(@Param("schoolYear") Integer schoolYear);
 
     void removeScore(@Param("list") List<StudentCourse> studentCourse);
 

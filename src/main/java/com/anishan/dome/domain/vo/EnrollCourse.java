@@ -2,12 +2,17 @@ package com.anishan.dome.domain.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
+@Data
 @ApiModel("选课实体类信息")
 public class EnrollCourse {
 
+    @ApiModelProperty("任教课程ID")
+    private Long teachId;
+
     @ApiModelProperty("课程ID")
-    private String courseId;
+    private Long courseId;
 
     @ApiModelProperty("课程名称")
     private String courseName;

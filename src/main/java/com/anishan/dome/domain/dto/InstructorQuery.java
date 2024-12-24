@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -19,6 +20,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString(callSuper = true)
 @ApiModel("辅导员表")
 public class InstructorQuery extends BaseQueryParam<Instructor> {
 
@@ -26,7 +28,7 @@ public class InstructorQuery extends BaseQueryParam<Instructor> {
     @ApiModelProperty("用户id")
     private Long userId;
 
-    @SelectAlias("c")
+    @SelectAlias("ins")
     @ApiModelProperty("专业")
     private Long majorId;
 

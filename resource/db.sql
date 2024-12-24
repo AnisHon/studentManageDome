@@ -155,7 +155,7 @@ create table student_course
 (
     teach_id  bigint        not null comment '任教课程ID',
     user_id   bigint        not null comment '学生id',
-    score     decimal(3, 2) null     comment '得分',
+    score     decimal(5, 2) null     comment '得分',
     primary key (teach_id, user_id),
     constraint sc_fk_user_id
         foreign key student_course(user_id) references student(user_id),

@@ -6,16 +6,19 @@ import com.anishan.dome.domain.AjaxResponse;
 import com.anishan.dome.domain.LoginUser;
 import com.anishan.dome.domain.MapAjaxResponse;
 import com.anishan.dome.domain.dto.LoginForm;
-import com.anishan.dome.domain.dto.SignUpForm;
 import com.anishan.dome.domain.vo.CaptchaResponse;
+import com.anishan.dome.domain.vo.LoginResponse;
+import com.anishan.dome.exception.AuthException;
 import com.anishan.dome.service.AuthService;
 import com.anishan.dome.utils.AuthUtils;
-import io.swagger.annotations.ApiModelProperty;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -30,9 +33,15 @@ public class AuthController {
     @ResponseBody
     @PostMapping("/login")
     @ApiOperation("登录接口，需要验证码 验证码token")
-    public AjaxResponse<Void> login(@RequestBody LoginForm loginForm) {
-        authService.login(loginForm);
-        return AjaxResponse.ok(null);
+    public AjaxResponse<LoginResponse> login(@RequestBody LoginForm loginForm) {
+        String token = null;
+        try {
+            token = authService.login(loginForm);
+
+        } catch (AuthException | AuthenticationException e) {
+            return AjaxResponse.ok(LoginResponse.build(false, e.getMessage(), token));
+        }
+        return AjaxResponse.ok(LoginResponse.build(true, null, token));
     }
 
 
@@ -54,7 +63,7 @@ public class AuthController {
     }
 
     @ResponseBody
-    @GetMapping()
+    @GetMapping
     @ApiOperation("获取自己")
     public AjaxResponse<LoginUser> myself() {
         return AjaxResponse.ok(AuthUtils.getLoginUser());
