@@ -18,6 +18,8 @@ public interface MarkMapper extends BaseMapper<Mark> {
     void deleteByInstructorIdAndStudentId(@Param("list")List<Mark> marks);
 
     List<MarkVo> listAllByInstructorId(@Param("instructorId") Long instructorId);
+
+    void updateTagByStudentIdAndInstructorId(@Param("studentId") Long studentId, @Param("instructorId") Long instructorId, @Param("tag") String tag);
 }
 
 

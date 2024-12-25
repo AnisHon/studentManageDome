@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -41,7 +42,8 @@ public class StudentCourse implements Serializable {
     /**
      *
      */
-    @Min(message = "不是哥们",value = 0)
+
+    @Range(min = 0, max = 100)
     @ApiModelProperty("得分")
     private BigDecimal score;
 

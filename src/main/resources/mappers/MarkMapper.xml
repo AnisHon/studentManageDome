@@ -11,8 +11,14 @@
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <update id="updateTagByStudentIdAndInstructorId">
+        update mark set tag = #{tag}
+        where
+            student_id = #{studentId} and
+            instructor_id = #{instructorId}
+    </update>
 
-    
+
     <delete id="deleteByInstructorIdAndStudentId">
         <foreach collection="item in list">
             delete from mark

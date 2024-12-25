@@ -7,6 +7,7 @@ import com.anishan.dome.mapper.MarkMapper;
 import com.anishan.dome.service.MarkService;
 import com.anishan.dome.utils.AuthUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,14 @@ public class MarkServiceImpl extends ServiceImpl<MarkMapper, Mark>
     @Override
     public void mark(MarkDto mark) {
         Long userId = AuthUtils.getUserId();
-        Mark markObj = new Mark()
-                .setInstructorId(userId)
-                .setStudentId(mark.getStudentId());
-        this.save(markObj);
+
+        Mark markEntity = new Mark()
+                .setTag(mark.getTag())
+                .setStudentId(mark.getStudentId())
+                .setInstructorId(userId);
+        this.save(markEntity);
+
+
     }
 
     @Override
@@ -46,11 +51,9 @@ public class MarkServiceImpl extends ServiceImpl<MarkMapper, Mark>
     @Override
     public void updateMark(MarkDto mark) {
         Long userId = AuthUtils.getUserId();
-        Mark markObj = new Mark()
-                .setInstructorId(userId)
-                .setStudentId(mark.getStudentId());
-        this.update(markObj,
-                new LambdaQueryWrapper<Mark>()
+        this.update(
+                new LambdaUpdateWrapper<Mark>()
+                        .set(Mark::getTag, mark.getTag())
                         .eq(Mark::getStudentId, mark.getStudentId())
                         .eq(Mark::getInstructorId, userId)
         );

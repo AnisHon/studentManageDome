@@ -10,11 +10,9 @@ import lombok.EqualsAndHashCode;
 @Data
 public class StatisticFrom extends BaseQueryParam<StudentCourse> {
 
-    @SelectAlias("c")
     @ApiModelProperty("班级ID")
     private Long classId;
 
-    @SelectAlias("tc")
     @ApiModelProperty("任教课程ID，这个直接输入不用下拉框了")
     private Long teachId;
 

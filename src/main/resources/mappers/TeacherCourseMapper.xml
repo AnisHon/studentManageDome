@@ -31,6 +31,7 @@
     </select>
     <select id="selectTeacher" resultType="com.anishan.dome.domain.vo.TeacherVo">
         select
+            tc.teach_id as teach_id,
             t.user_id as user_id,
             t.institution as institution,
             t.title as title,

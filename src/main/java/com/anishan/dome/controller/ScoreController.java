@@ -13,6 +13,7 @@ import com.anishan.dome.domain.vo.StatisticResult;
 import com.anishan.dome.exception.BusinessException;
 import com.anishan.dome.service.StudentCourseService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,9 +21,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api("成绩相关操作api")
 @RestController
@@ -45,31 +51,69 @@ public class ScoreController {
     @GetMapping("/export")
     @SneakyThrows
     public void exportScore(@Validated ScoreQuery query, @ApiParam("是按照分数否降序，可以为空") Boolean asc, HttpServletResponse response) {
+        query.setPageNum(1L);
+        query.setPageSize(300L);
+
         PageResponse<ScoreVo> scores = studentCourseService.queryScore(query, asc);
 
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         response.setHeader("Content-disposition", "attachment;filename=score.xlsx");
 
+
         if (CollUtil.isEmpty(scores.getRows())) {
             throw new BusinessException("您所查询的选项没有数据，无法导出");
         }
 
 
+
         EasyExcel.write(response.getOutputStream(), ScoreVo.class)
                 .sheet("学生成绩")
                 .doWrite(scores.getRows());
+    }
+
+
+    @ApiOperation("导入成绩")
+    @PutMapping("/import")
+    @SneakyThrows
+    public void exportScore(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new BusinessException("没有文件");
+        }
+        InputStream inputStream = file.getInputStream();
+        List<StudentCourse> score = EasyExcel
+                .read(inputStream)
+                .head(ScoreVo.class)
+                .sheet(0)
+                .doReadSync()
+                .stream()
+                .map(
+                        x -> {
+                            ScoreVo vo = (ScoreVo)x;
+                            return new StudentCourse()
+                                    .setTeachId(vo.getTeachId())
+                                    .setScore(vo.getScore())
+                                    .setUserId(vo.getStudentId());
+                        }
+                ).collect(Collectors.toList());
+
+        studentCourseService.saveBatch(score);
 
     }
 
 
+
+
+
     @ApiOperation("编辑成绩")
     @PutMapping
-    public AjaxResponse<Void> updateScore(@Validated  StudentCourse studentCourse) {
+    public AjaxResponse<Void> updateScore(@Validated @RequestBody StudentCourse studentCourse) {
         studentCourseService.update(
-                new LambdaQueryWrapper<StudentCourse>()
+                new LambdaUpdateWrapper<StudentCourse>()
+                        .set(StudentCourse::getScore, studentCourse.getScore())
                         .eq(StudentCourse::getUserId, studentCourse.getUserId())
                         .eq(StudentCourse::getTeachId, studentCourse.getTeachId())
+
         );
         return AjaxResponse.ok(null);
     }
@@ -78,7 +122,24 @@ public class ScoreController {
     @ApiOperation("添加成绩")
     @PostMapping
     public AjaxResponse<Void> saveScore(@Validated @RequestBody StudentCourse studentCourse) {
-        studentCourseService.save(studentCourse);
+
+        boolean exists = studentCourseService.exists(new LambdaQueryWrapper<StudentCourse>()
+                .eq(StudentCourse::getTeachId, studentCourse.getTeachId())
+                .eq(StudentCourse::getUserId, studentCourse.getUserId())
+
+        );
+
+        if (!exists) {
+            throw new BusinessException("该选课不存在");
+        }
+
+        studentCourseService.update(
+                new LambdaUpdateWrapper<StudentCourse>()
+                        .set(StudentCourse::getScore, studentCourse.getScore())
+                        .eq(StudentCourse::getTeachId, studentCourse.getTeachId())
+                        .eq(StudentCourse::getUserId, studentCourse.getUserId())
+                        .isNotNull(StudentCourse::getScore)
+        );
         return AjaxResponse.ok(null);
     }
 

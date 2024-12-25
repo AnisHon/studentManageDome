@@ -78,6 +78,8 @@ public class SysUser extends BaseEntity implements Serializable {
     @ApiModelProperty("学生 1 辅导员 5 教师 10 管理员 20")
     private RoleEnum role;
 
+    @ApiModelProperty("头像")
+    private String portrait;
     /**
      * 用户状态(0 正常，1 异常)
      */

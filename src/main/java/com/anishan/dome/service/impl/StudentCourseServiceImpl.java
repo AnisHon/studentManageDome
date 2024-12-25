@@ -87,8 +87,9 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
                 .map(id -> new StudentCourse().setTeachId(id).setUserId(userId))
                 .collect(Collectors.toList());
 
-
-        studentCourseMapper.deleteBatchInSchoolYear(studentCourses, schoolYear);
+        studentCourses.forEach(x -> {
+            studentCourseMapper.deleteBatchInSchoolYear(x.getTeachId(), x.getUserId(), schoolYear);
+        });
     }
 
     @Override
@@ -126,7 +127,6 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
                 orderItem.setAsc(Boolean.TRUE);
             } else if (asc.equals(Boolean.FALSE)) {
                 orderItem.setAsc(Boolean.FALSE);
-
             }
             orderItem.setColumn("sc.score");
             page.addOrder(orderItem);
@@ -135,8 +135,7 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseMapper, S
         page.setSearchCount(false);
         List<ScoreVo> scoreVos = studentCourseMapper.selectScoreVos(page, wrapper);
 
-        log.info(query.toString());
-        Long l = studentCourseMapper.countScores(query.getSchoolYear());
+        Long l = studentCourseMapper.countScores(wrapper);
 
         return PageResponse.build(l, scoreVos);
     }

@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -100,7 +103,7 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
     public AjaxResponse<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.info("{}{}", e.getClass(), e.getMessage());
-        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "未知参数");
     }
 
 
@@ -109,8 +112,8 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
     public AjaxResponse<Void> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.info(e.getMessage(), e);
-//        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "实体或参照完整性冲突");
-        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "数据冲突，参照完整性错误");
+//        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
     }
 
     @ResponseBody
@@ -128,4 +131,25 @@ public class GlobalExceptionAdvice {
         return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "更改失败，请重试");
     }
 
+    @ResponseBody
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleDuplicateKeyException(DuplicateKeyException e) {
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "操作失败，请检查是否重复");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleSQLException(SQLException e) {
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(UncategorizedSQLException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleUncategorizedSQLException(UncategorizedSQLException e) {
+        String message = Objects.requireNonNull(e.getRootCause()).getMessage();
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, message);
+    }
 }

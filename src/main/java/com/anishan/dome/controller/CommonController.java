@@ -5,6 +5,8 @@ import com.anishan.dome.domain.entity.Article;
 import com.anishan.dome.domain.entity.BaseEntity;
 import com.anishan.dome.domain.vo.ArticleVo;
 import com.anishan.dome.service.ArticleService;
+import com.anishan.dome.utils.AuthUtils;
+import com.anishan.dome.utils.SchoolYearUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,6 +27,7 @@ import java.util.List;
 public class CommonController {
 
     private final ArticleService articleService;
+    private final SchoolYearUtil schoolYearUtil;
 
     @ApiOperation("limit")
     @GetMapping("/notifications/{limit}")
@@ -44,6 +47,12 @@ public class CommonController {
     public AjaxResponse<ArticleVo> getArticle(@PathVariable Long articleId) {
         ArticleVo articleVo = articleService.get(articleId);
         return AjaxResponse.ok(articleVo);
+    }
+
+    @ApiOperation("是否开启选课")
+    @GetMapping("/isStarted")
+    public AjaxResponse<Boolean> isStarted(@PathVariable Integer articleId) {
+        return AjaxResponse.ok(schoolYearUtil.isStarted());
     }
 
 }

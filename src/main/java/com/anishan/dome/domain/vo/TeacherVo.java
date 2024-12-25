@@ -14,6 +14,9 @@ import java.util.Date;
 @Data
 public class TeacherVo {
 
+    @ApiModelProperty("任教课程id")
+    private Long teachId;
+
     @ApiModelProperty("用户id")
     private Long userId;
 
