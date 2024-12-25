@@ -13,6 +13,7 @@
         select
             c.course_id as course_id,
             c.course_name as course_name,
+            t.institution as institution,
             tc.teach_id as teach_id,
             c.credit as credit,
             c.duration as duration,

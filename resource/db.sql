@@ -44,11 +44,11 @@ create table sys_user
         primary key,
     work_number varchar(255) null comment '工号',
     password    varchar(255) not null comment '密码',
-    username    varchar(255) not null comment '姓名',
+    username    varchar(255) not null comment '姓名' check ( length(username) between 1 and 10),
     birthday    date         not null comment '生日',
     gender      tinyint      not null comment '性别 0 男 1女',
-    role        int          null default 1 comment '(学生 1 辅导员 5 教师 10 管理员 20)',
-    status      int          null default 0 comment '用户状态(0 正常，1 异常)',
+    role        int          null default 1 check ( role in (1, 5, 10, 20) ) comment '(学生 1 辅导员 5 教师 10 管理员 20)',
+    status      int          null default 0 check ( status in (0, 1) )comment '用户状态(0 正常，1 异常)',
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint sys_user_pk_2
@@ -69,9 +69,9 @@ create table student
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint student_fk_user_id
-        foreign key student(user_id) references sys_user(user_id),
+        foreign key student(user_id) references sys_user(user_id) on delete cascade,
     constraint student_class_pk foreign key student(class_id)
-        references class(class_id)
+        references class(class_id) on delete cascade
 ) engine=InnoDB comment '用户分表 学生表';
 
 # -----------------------------------------------------
@@ -87,7 +87,7 @@ create table teacher
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint teacher_fk_user_id
-        foreign key teacher(user_id) references sys_user(user_id)
+        foreign key teacher(user_id) references sys_user(user_id) on delete cascade
 ) engine=InnoDB comment '用户分表 教师表';
 
 # -----------------------------------------------------
@@ -102,9 +102,9 @@ create table instructor
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint instructor
-        foreign key instructor(user_id) references sys_user(user_id),
+        foreign key instructor(user_id) references sys_user(user_id) on delete cascade,
     constraint instructor_major_pk foreign key instructor(major_id)
-        references major(major_id)
+        references major(major_id) on delete cascade
 ) engine=InnoDB comment '用户分表 辅导员表';
 
 
@@ -135,14 +135,14 @@ drop table if exists teacher_course;
 create table teacher_course
 (
     teach_id  bigint
-        primary key                  not null comment '任教课程ID',
+        primary key         not null comment '任教课程ID',
     course_id bigint        not null comment '课程ID',
     user_id   bigint        not null comment '教师id',
     unique key (course_id, user_id),
     constraint tc_fk_user_id
-        foreign key teacher_course(user_id) references teacher(user_id),
+        foreign key teacher_course(user_id) references teacher(user_id) on delete cascade,
     constraint tc_fk_course_id
-        foreign key teacher_course(course_id) references course(course_id)
+        foreign key teacher_course(course_id) references course(course_id) on delete cascade
 
 ) engine=InnoDB comment '任教表';
 
@@ -174,11 +174,29 @@ create table mark
     create_time datetime     default current_timestamp comment '创建时间',
     update_time datetime     default current_timestamp comment '修改时间，乐观锁',
     constraint mark_student_fk
-        foreign key mark(student_id) references student(user_id),
+        foreign key mark(student_id) references student(user_id) on delete cascade ,
     constraint mark_instructor_fk
-        foreign key mark(instructor_id) references instructor(user_id)
+        foreign key mark(instructor_id) references instructor(user_id) on delete cascade
 ) engine=InnoDB comment '标记表';
 
+create table article (
+    article_id      bigint          not null
+        primary key                             comment '文章ID',
+    user_id          bigint         null comment '文章作者ID',
+    title           varchar(255)    not null comment '标题ID',
+    create_time datetime     default current_timestamp comment '创建时间',
+    update_time datetime     default current_timestamp comment '修改时间，乐观锁',
+    constraint article_user_id_fk
+                     foreign key article(user_id) references sys_user(user_id) on delete set null
+) engine=InnoDB comment '文章';
 
 
+create table article_content
+(
+    article_id bigint   not null
+        primary key comment '文章内容ID',
+    content    longtext not null comment '文章内容',
+    constraint article_content_article_id_fk
+        foreign key article_content (article_id) references article (article_id) on delete cascade
 
+) engine=InnoDB comment '文章内容';

@@ -16,7 +16,7 @@ public class MarkVo {
     private String studentName;
 
     @ApiModelProperty("标记文字")
-    private String Tag;
+    private String tag;
 
     @ApiModelProperty("标记时间")
     private String createTime;

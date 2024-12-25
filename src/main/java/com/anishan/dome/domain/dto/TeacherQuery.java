@@ -38,12 +38,5 @@ public class TeacherQuery extends BaseQueryParam<Teacher> implements Serializabl
     @ApiModelProperty("昵称")
     private String title;
 
-    /**
-     * 专业
-     */
-    @SelectAlias("t")
-    @ApiModelProperty("专业")
-    private Long majorId;
-
 
 }

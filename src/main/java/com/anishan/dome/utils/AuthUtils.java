@@ -23,7 +23,6 @@ public class AuthUtils {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
-    private final AuthenticationManager authenticationManager;
 
     public String getKey(Long userId) {
         return "system:user-id:" + userId;
@@ -52,6 +51,14 @@ public class AuthUtils {
 
         String code = stringRedisTemplate.opsForValue().get(captchaKey);
         redisTemplate.delete(captchaKey);
+
+
+        if (code != null && captchaCode != null) {
+            code = code.toLowerCase();
+            captchaCode = captchaCode.toLowerCase();
+        }
+
+
 
         return StrUtil.equals(code, captchaCode);
 

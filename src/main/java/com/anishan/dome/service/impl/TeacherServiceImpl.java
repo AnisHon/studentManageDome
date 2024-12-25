@@ -78,6 +78,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
         SysUser sysUser = BeanUtil.copyProperties(entity, SysUser.class);
 
         boolean b = Db.updateById(sysUser);
+        sysUser.setPassword(passwordEncoder.encode(entity.getPassword()));
 
         teacher.setUserId(sysUser.getUserId());
         b &= this.updateById(teacher);

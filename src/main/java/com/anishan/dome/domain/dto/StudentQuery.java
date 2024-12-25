@@ -40,6 +40,10 @@ public class StudentQuery extends BaseQueryParam<Student> {
     private Long majorId;
 
     @SelectAlias("u")
+    @ApiModelProperty("学号")
+    private String workNumber;
+
+    @SelectAlias("u")
     @ApiModelProperty("姓名")
     private String username;
 

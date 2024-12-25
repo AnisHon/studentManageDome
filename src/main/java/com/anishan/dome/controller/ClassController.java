@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class ClassController {
 
     @ApiModelProperty("获取所有班级")
     @GetMapping("/all")
+    @ResponseBody
     private AjaxResponse<List<ClassVo>> all() {
         return AjaxResponse.ok(classService.all());
     }
@@ -40,12 +42,14 @@ public class ClassController {
 
     @GetMapping("/list")
     @ApiOperation("查询，分页接口")
+    @ResponseBody
     public AjaxResponse<PageResponse<ClassVo>> list(@Validated ClazzQuery query) {
         return AjaxResponse.ok(classService.listVo(query));
     }
 
     @PostMapping
     @ApiOperation("添加")
+    @ResponseBody
     public AjaxResponse<Boolean> save(@Validated({Insert.class}) @RequestBody Clazz entity) {
         entity.setClassId(null);
         return AjaxResponse.ok(classService.save(entity));
@@ -53,13 +57,24 @@ public class ClassController {
 
     @PutMapping
     @ApiOperation("更新修改接口")
+    @ResponseBody
     public AjaxResponse<Boolean> update(@Validated({Update.class}) @RequestBody Clazz entity) {
         return AjaxResponse.ok(classService.updateById(entity));
     }
 
+    @ApiOperation("通过id查询")
     @GetMapping("/{classId}")
+    @ResponseBody
     public AjaxResponse<Clazz> get(@PathVariable Long classId) {
         return AjaxResponse.ok(classService.getById(classId));
+    }
+
+    @DeleteMapping("/{classId}")
+    @ApiOperation("删除")
+    @ResponseBody
+    @Transactional
+    public AjaxResponse<Boolean> delete(@PathVariable List<Long> classId) {
+        return AjaxResponse.ok(classService.removeByIds(classId));
     }
 
 }

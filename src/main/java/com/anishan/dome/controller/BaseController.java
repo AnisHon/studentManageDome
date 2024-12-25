@@ -24,12 +24,14 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @GetMapping("/{id}")
     @ApiOperation("通过ID查询")
+    @ResponseBody
     public AjaxResponse<T> get(@PathVariable Long id) {
         return AjaxResponse.ok(service.getById(id));
     }
 
     @GetMapping("/list")
     @ApiOperation("查询，分页接口")
+    @ResponseBody
     public AjaxResponse<PageResponse<T>> list(@Validated K query) {
         Page<T> tPage = query.queryPage();
         LambdaQueryWrapper<T> wrapper = query.queryWrapper();
@@ -41,12 +43,14 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
 
     @DeleteMapping("/{userId}")
     @ApiOperation("删除接口")
+    @ResponseBody
     public AjaxResponse<Boolean> del(@PathVariable("userId") List<Long> userId) {
         return AjaxResponse.ok(service.removeByIds(userId));
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ApiOperation("添加接口")
+    @ResponseBody
     public AjaxResponse<Boolean> save(@Validated @RequestBody T entity) {
         Arrays
                 .stream(entity.getClass().getDeclaredFields())
@@ -66,8 +70,9 @@ public class BaseController<T, K extends BaseQueryParam<T>> {
         return AjaxResponse.ok(service.save(entity));
     }
 
-    @PutMapping("/")
+    @PutMapping
     @ApiOperation("修改接口")
+    @ResponseBody
     public AjaxResponse<Boolean> update(@Validated @RequestBody T entity) {
         return AjaxResponse.ok(service.updateById(entity));
     }

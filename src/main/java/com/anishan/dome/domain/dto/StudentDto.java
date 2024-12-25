@@ -16,9 +16,6 @@ public class StudentDto {
     @ApiModelProperty("用户id")
     private Long userId;
 
-    @ApiModelProperty("专业id")
-    private Long majorId;
-
     @ApiModelProperty("班级id")
     private Long classId;
 

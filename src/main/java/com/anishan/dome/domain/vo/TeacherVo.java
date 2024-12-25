@@ -23,6 +23,9 @@ public class TeacherVo {
     @ApiModelProperty("职称")
     private String title;
 
+    @ApiModelProperty
+    private String institution;
+
     @ApiModelProperty("姓名")
     private String username;
 
