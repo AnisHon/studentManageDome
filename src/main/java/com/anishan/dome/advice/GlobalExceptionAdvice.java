@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -108,7 +109,8 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
     public AjaxResponse<Void> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.info(e.getMessage(), e);
-        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "实体或参照完整性冲突");
+//        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "实体或参照完整性冲突");
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, e.getMessage());
     }
 
     @ResponseBody
@@ -117,6 +119,13 @@ public class GlobalExceptionAdvice {
     public AjaxResponse<Void> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         String collect = String.join(",", Objects.requireNonNull(e.getSupportedMethods()));
         return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "不支持的请求方法：" + e.getMethod() + ",请使用："+ collect);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.BAD_REQUEST)
+    public AjaxResponse<Void> handleOptimisticLockingFailureException(OptimisticLockingFailureException e) {
+        return AjaxResponse.error(HttpStatus.HTTP_BAD_REQUEST, "更改失败，请重试");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.anishan.dome.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class BaseEntity {
     @ApiModelProperty("插入和更新的时候请忽略，但是存在于查询结果")
     private LocalDateTime createTime;
 
+    @Version
     @Null(groups = Update.class)
     @ApiModelProperty("插入和更新的时候请忽略，但是存在于查询结果")
     private LocalDateTime updateTime;

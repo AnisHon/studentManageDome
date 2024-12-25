@@ -57,14 +57,14 @@ public class InstructorController {
     }
 
     @ResponseBody
-    @PostMapping("/")
+    @PostMapping
     @ApiOperation("添加接口")
     public AjaxResponse<Boolean> save(@Validated @RequestBody InstructorDto entity) {
         return AjaxResponse.ok(instructorService.saveInstructor(entity));
     }
 
     @ResponseBody
-    @PutMapping("/")
+    @PutMapping
     @ApiOperation("修改接口")
     public AjaxResponse<Boolean> update(@Validated(Update.class) @RequestBody InstructorDto entity) {
         return AjaxResponse.ok(instructorService.updateInstructor(entity));
