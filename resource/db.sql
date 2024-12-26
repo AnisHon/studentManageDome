@@ -146,7 +146,8 @@ create table teacher_course
         foreign key teacher_course(course_id) references course(course_id) on delete cascade
 
 ) engine=InnoDB comment '任教表';
-
+create index tc_teach_id_idx on teacher_course(teach_id);
+create index tc_course_id_idx on teacher_course(teach_id);
 
 # -----------------------------------------------------
 # 9. 选课表
@@ -163,6 +164,8 @@ create table student_course
     constraint sc_fk_teach_id
         foreign key student_course(teach_id) references teacher_course(teach_id)
 ) engine=InnoDB comment '选课表';
+create index sc_teach_id_idx on student_course(teach_id);
+create index sc_user_id_idx on student_course(user_id);
 
 # -----------------------------------------------------
 # 10. 标记表
@@ -181,7 +184,7 @@ create table mark
     constraint mark_instructor_fk
         foreign key mark(instructor_id) references instructor(user_id) on delete cascade
 ) engine=InnoDB comment '标记表';
-
+create index instructor_id_idx on mark(instructor_id);
 
 # -----------------------------------------------------
 # 11. 标记表
